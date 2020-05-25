@@ -112,6 +112,17 @@ def get_ipv6():
     return address
     pass
 
+def get_IP2():
+    import socket
+    # family = socket.AF_INET    # ipv4时改为socket.AF_INET
+    family = socket.AF_INET6    # ipv6时改为socket.AF_INET6
+    # server = '8.8.8.8'         # ipv4时改为'8.8.8.8'
+    server = '2001:4860:4860::8888'         # ipv6时改为'2001:4860:4860::8888'
+    s = socket.socket(family, socket.SOCK_DGRAM)
+    s.connect((server, 80))
+    my_ip = s.getsockname()[0]
+    print my_ip
+    return my_ip
 
 def main():
 
