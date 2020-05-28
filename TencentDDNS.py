@@ -112,6 +112,20 @@ def get_ipv6():
     return address
     pass
 
+
+def ping_ipv6():
+    google_ipv6_url = '2001:dc7:1000::1'
+    response = os.system("ping -c 1 " + google_ipv6_url)
+    if response == 0:
+        ok = True
+    else:
+        ok = False
+    print ok
+    return ok
+    pass
+
+
+
 def get_IP2():
     import socket
     # family = socket.AF_INET    # ipv4时改为socket.AF_INET
