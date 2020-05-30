@@ -5,6 +5,8 @@ import hashlib, base64, hmac, random
 import logging
 import logging.handlers
 import sys
+import subprocess
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 ## 腾讯云API接口签名
@@ -139,20 +141,34 @@ def get_IP2():
     return my_ip
 
 def main():
-
     # 0获取RecordList
-    req_action_query = 'RecordList'
-    req_extra_params = 'xxxx.com'
-    getRecordList(req_action_query, req_extra_params)
-    # 1 获取ipv6
-    ipv6 = get_ipv6()
-    # 2 改解析
+    # req_action_query = 'RecordList'
+    # req_extra_params = 'xxx.com'
+    # getRecordList(req_action_query, req_extra_params)
+    # # 1 获取ipv6
     while 1:
-        if not ipv6 == None:
+        success = 0
+        if ping_ipv6():
+            ipv6 = get_IP2()
+            success = 1
+            pass
+        else:
+            print 'ipv6 connection error'
+            print 'no matching ipv6'
+            # restart ipv6 protocol
+            Disable = u'Disable-NetAdapterBinding -Name 以太网 -ComponentID ms_tcpip6'.encode('gbk')
+            Enable = u'Enable-NetAdapterBinding -Name 以太网 -ComponentID ms_tcpip6'.encode('gbk')
+            subprocess.call('powershell.exe {}'.format(Disable), shell=True)
+            time.sleep(2)
+            subprocess.call('powershell.exe {}'.format(Enable), shell=True)
+
+            time.sleep(10)
+            success = 0
+            ipv6 = ''
+        if success == 1:
             break
-        ipv6 = get_ipv6()
-        print 'no matching ipv6'
-        time.sleep(10)
+
+    # 2 改解析
 
     while 1:
         try:
